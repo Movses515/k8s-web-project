@@ -1,0 +1,13 @@
+replicaCount: 2
+
+image:
+  repository: movses555/simple-web-project
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  nodePort: 31600
+  targetPort: 80
+  port: 80
+
