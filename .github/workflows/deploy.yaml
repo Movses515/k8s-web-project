@@ -36,8 +36,13 @@ jobs:
         run: |
           sed -i "s/tag:.*/tag: ${{ github.sha }}/" ./Charts/values.yaml 
 
-      - name: Show Updated values.yaml
-        run: cat ./Charts/values.yaml
+      - name: Commit & Push Updated values.yaml
+        run: |
+          git config --global user.name "Movses515"
+          git config --global user.email "mmartirosyan69@gmail.com"
+          git add ./Charts/values.yaml
+          git commit -m "Update image tag to ${{ github.sha }}"
+          git push    
 
       - name: Log in to ArgoCD
         run: |
