@@ -1,0 +1,45 @@
+name: Build, Push, and Deploy to K8s via ArgoCD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    env:
+      IMAGE_NAME: movses555/simple-web-project
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t $IMAGE_NAME:${{ github.sha }} . 
+          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ github.sha }} 
+          docker push $IMAGE_NAME:${{ github.sha }}      
+          docker push $IMAGE_NAME:latest               
+
+      - name: Update Helm Chart Image Tag
+        run: |
+          sed -i "s/tag:.*/tag: ${{ github.sha }}/" ./Charts/values.yaml 
+
+      - name: Log in to ArgoCD
+        run: |
+          argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+
+      - name: Deploy to Kubernetes via ArgoCD
+        run: |
+          argocd app sync simple-web-project
