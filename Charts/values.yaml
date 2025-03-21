@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: movses555/simple-web-project
-  tag: "{{ .Values.image.tag }}"
+  tag: v1.0.0
   pullPolicy: IfNotPresent
 
 service:
