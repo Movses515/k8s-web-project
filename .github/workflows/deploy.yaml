@@ -37,7 +37,7 @@ jobs:
           sed -i "s/tag:.*/tag: ${{ github.sha }}/" ./Charts/values.yaml 
 
       - name: Show Updated values.yaml
-        run: cat ./charts/values.yaml
+        run: cat ./Charts/values.yaml
 
       - name: Log in to ArgoCD
         run: |
