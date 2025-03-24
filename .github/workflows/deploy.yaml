@@ -40,7 +40,7 @@ jobs:
         run: |
           git config --global user.name "Movses515"
           git config --global user.email "mmartirosyan69@gmail.com"
-          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/Movses515/k8s-web-project.git
+          git remote set-url origin "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/Movses515/k8s-web-project.git"
           git add ./Charts/values.yaml
           git commit -m "Update image tag to ${{ github.sha }}"
           git push
