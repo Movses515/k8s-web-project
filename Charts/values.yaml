@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: movses555/simple-web-project
-  tag: b4662370f1684fcd192379e5ceed5620fb8249c7
+  tag: cf3ede37e86f2b1ee9aa03b757dc57a12a1d5ab3
   pullPolicy: IfNotPresent
 
 service:
