@@ -5,10 +5,11 @@ metadata:
   namespace: default
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: nginx
 spec:
   ingressClassName: nginx
   rules:
-    - host: myapp.simple.com
+    - host: movsesdevops.xyz
       http:
         paths:
           - path: /
