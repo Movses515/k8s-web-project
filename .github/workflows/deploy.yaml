@@ -40,7 +40,7 @@ jobs:
         run: |
           git remote set-url origin git@github.com:Movses515/k8s-web-project.git
           git add ./Charts/values.yaml
-          git commit -m "Update image tag to ${{ github.sha }}"
+          git commit -m "Update image tag to ${{ github.sha }} [skip ci]"
           git push
 
       - name: Log in to ArgoCD
