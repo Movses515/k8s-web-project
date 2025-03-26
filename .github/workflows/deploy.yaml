@@ -30,17 +30,23 @@ jobs:
           docker build -t $IMAGE_NAME:${{ github.sha }} . 
           docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ github.sha }} 
           docker push $IMAGE_NAME:${{ github.sha }}      
-          docker push $IMAGE_NAME:${{ github.sha }}               
+
+      - name: Checkout Helm Charts Repo
+        uses: actions/checkout@v3
+        with:
+          repository: Movses515/k8s-web-project-charts
+          token: ${{ secrets.PAT_TOKEN }}
+          path: ./
 
       - name: Update Helm Chart Image Tag
         run: |
-          sed -i "s/tag:.*/tag: ${{ github.sha }}/" ./Charts/values.yaml 
+          sed -i "s/tag:.*/tag: ${{ github.sha }}/" ./values.yaml 
 
       - name: Configure git for pushing
         run: |
-          git remote set-url origin git@github.com:Movses515/k8s-web-project.git
-          git add ./Charts/values.yaml
-          git commit -m "Update image tag to ${{ github.sha }} [skip ci]"
+          git remote set-url origin git@github.com:Movses515/k8s-web-project-charts.git
+          git add ./values.yaml
+          git commit -m "Update image tag to ${{ github.sha }}"
           git push
 
       - name: Log in to ArgoCD
