@@ -25,11 +25,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Log in to ArgoCD
+        run: |
+          argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }}    
+
       - name: Build and Push Docker Image
         run: |
           docker build -t $IMAGE_NAME:${{ github.sha }} . 
           docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:${{ github.sha }} 
-          docker push $IMAGE_NAME:${{ github.sha }}      
+          docker push $IMAGE_NAME:${{ github.sha }}       
 
       - name: Checkout Helm Charts Repo
         uses: actions/checkout@v3
@@ -48,10 +52,6 @@ jobs:
           git add ./values.yaml
           git commit -m "Update image tag to ${{ github.sha }}"
           git push
-
-      - name: Log in to ArgoCD
-        run: |
-          argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }}
 
       - name: Deploy to Kubernetes via ArgoCD
         run: |
